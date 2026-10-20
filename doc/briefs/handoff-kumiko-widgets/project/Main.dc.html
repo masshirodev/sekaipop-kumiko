@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kumiko widgets on the SekaiPop desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;600;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{opacity:.8}
+button{font:inherit}
+.sp-key{transition:transform 260ms cubic-bezier(.34,1.56,.64,1)}
+.sp-key:active{transform:translate(4px,3px);box-shadow:none !important;transition:none}
+</style>
+</helmet>
+<div style="width: 1440px; font-family: 'Google Sans Flex', 'Google Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; color: #555473">
+<sc-for list="{{modes}}" as="t" hint-placeholder-count="2">
+<div style="width: 1440px; height: 860px; position: relative; overflow: hidden; background: {{t.paper}}">
+<svg aria-hidden="true" width="1440" height="860" style="position: absolute; left: 0; top: 0">
+<g transform="rotate(-24 300 700)"><rect x="-200" y="560" width="900" height="34" fill="#8ee3ef" opacity="0.55"></rect><rect x="-200" y="610" width="900" height="34" fill="#ff9ecb" opacity="0.55"></rect><rect x="-200" y="660" width="900" height="34" fill="#ffe066" opacity="0.55"></rect></g>
+</svg>
+
+<div style="position: absolute; left: 16px; right: 16px; top: 16px; height: 57px; box-sizing: border-box; border: 3px solid {{t.line}}; border-radius: 999px; background: {{t.surface}}; box-shadow: inset 0 0 0 4px {{t.outerRing}}, 0 4px 0 0 {{t.lineShadow}}; display: flex; align-items: center; gap: 10px; padding: 0 14px; color: {{t.ink}}">
+<span style="width: 34px; height: 30px; border-radius: 15px; border: 3px solid #555473; box-sizing: border-box; background: linear-gradient(90deg, #00ffcb, #04feee); display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #555473">1</span>
+<span style="width: 34px; height: 30px; border-radius: 15px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: grid; place-items: center; font-size: 13px; font-weight: 800">2</span>
+<span style="width: 34px; height: 30px; border-radius: 15px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: grid; place-items: center; font-size: 13px; font-weight: 800">3</span>
+<span style="margin-left: auto; height: 30px; padding: 0 14px; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: flex; align-items: center; font-size: 12px; font-weight: 800">Tue 20 Oct</span>
+<span style="height: 30px; padding: 0 14px; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: flex; align-items: center; font-size: 14px; font-weight: 800">15:57</span>
+</div>
+
+<span style="position: absolute; left: 32px; bottom: 28px; height: 30px; padding: 0 14px; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: flex; align-items: center; font-size: 14px; font-weight: 800">{{t.label}}</span>
+
+<section aria-label="Hours" style="position: absolute; left: 590px; top: 112px; width: 400px; box-sizing: border-box; border: 3px solid {{t.pLine}}; border-radius: 13px; background: {{t.pSurface}}; box-shadow: inset 0 0 0 4px {{t.pRing}}, 0 4px 0 0 {{t.pShadow}}; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; color: {{t.pInk}}">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 11px; height: 11px; border-radius: 50%; background: #2F8F6B"></span>
+<span style="font-size: 18px; font-weight: 800">Work</span>
+<span style="font-size: 15px; font-weight: 600; color: {{t.pInkSub}}">since 12:15</span>
+<sc-if value="{{hours.running}}" hint-placeholder-val="{{ true }}"><span style="margin-left: auto; height: 30px; padding: 0 12px; box-sizing: border-box; border-radius: 999px; border: 3px solid #555473; background: linear-gradient(90deg, #00ffcb, #04feee); color: #555473; font-size: 14px; font-weight: 800; display: flex; align-items: center">Running</span></sc-if>
+<sc-if value="{{hours.paused}}" hint-placeholder-val="{{ false }}"><span style="margin-left: auto; height: 30px; padding: 0 12px; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; font-size: 14px; font-weight: 800; display: flex; align-items: center">Paused · Break {{hours.pauseFmt}}</span></sc-if>
+<sc-if value="{{hours.ended}}" hint-placeholder-val="{{ false }}"><span style="margin-left: auto; height: 30px; padding: 0 12px; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; font-size: 14px; font-weight: 800; display: flex; align-items: center">Clocked out</span></sc-if>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="flex: 1; font-size: 46px; line-height: 1; font-weight: 800; letter-spacing: -1px">{{hours.elapsedFmt}}</div>
+<sc-if value="{{hours.running}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="sp-key" aria-label="Pause" onClick="{{hours.pause}}" style="width: 48px; height: 48px; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 3px solid {{t.pRingWhite}}; outline-offset: -6px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg></button>
+</sc-if>
+<sc-if value="{{hours.paused}}" hint-placeholder-val="{{ false }}">
+<button type="button" class="sp-key" aria-label="Resume" onClick="{{hours.resume}}" style="width: 48px; height: 48px; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 3px solid {{t.pRingWhite}}; outline-offset: -6px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></button>
+</sc-if>
+<sc-if value="{{hours.open}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="sp-key" aria-label="End session" onClick="{{hours.end}}" style="width: 48px; height: 48px; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 3px solid {{t.pRingWhite}}; outline-offset: -6px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg></button>
+</sc-if>
+<sc-if value="{{hours.ended}}" hint-placeholder-val="{{ false }}">
+<button type="button" class="sp-key" onClick="{{hours.start}}" style="height: 46px; padding: 0 20px; border-radius: 999px; border: 3px solid {{t.pLine}}; outline: 3px solid {{t.pRingWhite}}; outline-offset: -6px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg>Start Work</button>
+</sc-if>
+</div>
+<div aria-hidden="true" style="height: 18px; box-sizing: border-box; border: 3px solid {{t.pLine}}; border-radius: 999px; background: {{t.pDivider}}; overflow: hidden; display: flex; gap: 2px">
+<span style="width: 34%; background: {{t.pInk}}"></span>
+<span style="width: 8%; background: {{t.pLine}}"></span>
+<sc-if value="{{hours.running}}" hint-placeholder-val="{{ true }}"><span style="width: 46%; background: linear-gradient(90deg, #00ffcb, #04feee)"></span></sc-if>
+<sc-if value="{{hours.notRunning}}" hint-placeholder-val="{{ false }}"><span style="width: 46%; background: {{t.pInk}}"></span></sc-if>
+<sc-if value="{{hours.paused}}" hint-placeholder-val="{{ false }}"><span style="width: 6%; background: {{t.pLine}}"></span></sc-if>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; color: {{t.pInkSub}}">
+<span>Counted <span style="font-weight: 800; color: {{t.pInk}}">{{hours.countedFmt}}</span></span>
+<span>Week <span style="font-weight: 800; color: {{t.pInk}}">11:34</span> / 40:00</span>
+</div>
+</section>
+
+<section aria-label="Notifications" style="position: absolute; left: 590px; top: 400px; width: 400px; box-sizing: border-box; border: 3px solid {{t.pLine}}; border-radius: 13px; background: {{t.pSurface}}; box-shadow: inset 0 0 0 4px {{t.pRing}}, 0 4px 0 0 {{t.pShadow}}; padding: 18px 20px 14px; display: flex; flex-direction: column; color: {{t.pInk}}">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Notifications</h2>
+<sc-if value="{{notif.hasUnread}}" hint-placeholder-val="{{ true }}"><span style="min-width: 26px; height: 26px; padding: 0 8px; box-sizing: border-box; border-radius: 999px; background: {{t.chipFill}}; color: {{t.chipInk}}; font-size: 14px; font-weight: 800; display: grid; place-items: center">{{notif.unread}}</span></sc-if>
+<span style="margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 2px solid #555473; background: linear-gradient(90deg, #00ffcb, #04feee)"></span>Live</span>
+</div>
+<sc-if value="{{notif.empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 28px 0; text-align: center; font-size: 16px">All caught up</div>
+</sc-if>
+<sc-for list="{{notif.items}}" as="n" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 10px; min-height: 58px">
+<sc-if value="{{n.high}}" hint-placeholder-val="{{ false }}"><span role="img" aria-label="High priority" style="width: 26px; height: 26px; flex: none; border-radius: 9px; background: {{t.chipFill}}; color: {{t.chipInk}}; display: grid; place-items: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v9M12 19v.5"></path></svg></span></sc-if>
+<sc-if value="{{n.dot}}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="width: 26px; flex: none; display: grid; place-items: center"><span style="width: 9px; height: 9px; border-radius: 50%; background: {{t.pInk}}"></span></span></sc-if>
+<sc-if value="{{n.blank}}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="width: 26px; flex: none"></span></sc-if>
+<div style="flex: 1; min-width: 0">
+<sc-if value="{{n.unread}}" hint-placeholder-val="{{ true }}"><div style="font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{n.title}}</div></sc-if>
+<sc-if value="{{n.read}}" hint-placeholder-val="{{ false }}"><div style="font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{n.title}}</div></sc-if>
+<div style="font-size: 14px">{{n.meta}}</div>
+</div>
+<sc-if value="{{n.unread}}" hint-placeholder-val="{{ true }}"><button type="button" class="sp-key" aria-label="Mark read" onClick="{{n.markRead}}" style="width: 38px; height: 38px; flex: none; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 2px solid {{t.pRingWhite}}; outline-offset: -5px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button></sc-if>
+<button type="button" class="sp-key" aria-label="Dismiss" onClick="{{n.dismiss}}" style="width: 38px; height: 38px; flex: none; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 2px solid {{t.pRingWhite}}; outline-offset: -5px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{notif.hasUnread}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="sp-key" onClick="{{notif.readAll}}" style="margin-top: 10px; align-self: flex-start; height: 40px; padding: 0 18px; border-radius: 999px; border: 3px solid {{t.pLine}}; outline: 3px solid {{t.pRingWhite}}; outline-offset: -6px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; font-size: 15px; font-weight: 800; cursor: pointer">Mark all read</button>
+</sc-if>
+</section>
+
+<section aria-label="Today's list items" style="position: absolute; left: 1030px; top: 112px; width: 380px; box-sizing: border-box; border: 3px solid {{t.pLine}}; border-radius: 13px; background: {{t.pSurface}}; box-shadow: inset 0 0 0 4px {{t.pRing}}, 0 4px 0 0 {{t.pShadow}}; padding: 18px 20px 12px; display: flex; flex-direction: column; color: {{t.pInk}}">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Today</h2>
+<span style="font-size: 15px; font-weight: 600; color: {{t.pInkSub}}">{{lists.doneCount}} of {{lists.total}} done</span>
+<button type="button" class="sp-key" aria-label="Refresh" style="margin-left: auto; width: 38px; height: 38px; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 2px solid {{t.pRingWhite}}; outline-offset: -5px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: {{t.pInk}}; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"></path></svg></button>
+</div>
+<div aria-hidden="true" style="height: 14px; box-sizing: border-box; border: 3px solid {{t.pLine}}; border-radius: 999px; background: {{t.pDivider}}; overflow: hidden; margin-bottom: 6px"><div style="height: 100%; width: {{lists.pct}}%; background: {{t.pInk}}"></div></div>
+<sc-for list="{{lists.items}}" as="it" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; min-height: 54px; gap: 12px">
+<sc-if value="{{it.done}}" hint-placeholder-val="{{ false }}"><button type="button" class="sp-key" aria-label="{{it.btnLabel}}" onClick="{{it.toggle}}" style="width: 36px; height: 36px; flex: none; border-radius: 50%; border: 3px solid #555473; outline: 2px solid {{t.pRingWhite}}; outline-offset: -5px; background: linear-gradient(90deg, #00ffcb, #04feee); box-shadow: 4px 3px 0 0 {{t.pShadow}}; color: #555473; display: grid; place-items: center; padding: 0; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></button></sc-if>
+<sc-if value="{{it.open}}" hint-placeholder-val="{{ true }}"><button type="button" class="sp-key" aria-label="{{it.btnLabel}}" onClick="{{it.toggle}}" style="width: 36px; height: 36px; flex: none; border-radius: 50%; border: 3px solid {{t.pLine}}; outline: 2px solid {{t.pRingWhite}}; outline-offset: -5px; background: {{t.pDivider}}; box-shadow: 4px 3px 0 0 {{t.pShadow}}; padding: 0; cursor: pointer"></button></sc-if>
+<div style="flex: 1; min-width: 0">
+<sc-if value="{{it.done}}" hint-placeholder-val="{{ false }}"><div style="font-size: 16px; color: {{t.pInkSub}}; text-decoration: line-through; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.title}}</div></sc-if>
+<sc-if value="{{it.open}}" hint-placeholder-val="{{ true }}"><div style="font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.title}}</div></sc-if>
+<div style="font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.meta}}</div>
+</div>
+<sc-if value="{{it.late}}" hint-placeholder-val="{{ false }}"><span style="font-size: 15px; font-weight: 800">{{it.right}} · late</span></sc-if>
+<sc-if value="{{it.notLate}}" hint-placeholder-val="{{ true }}"><span style="font-size: 15px; font-weight: 600; color: {{t.pInkSub}}">{{it.right}}</span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{lists.refused}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; gap: 10px; align-items: flex-start; border: 3px solid {{t.pLine}}; border-radius: 13px; background: {{t.pHover}}; padding: 10px 12px; margin-top: 6px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 7.5v.5"></path></svg>
+<div style="font-size: 14px; line-height: 1.4"><strong style="font-weight: 800">Not logged: too soon.</strong> The last dose was at 10:30. The next is allowed after 14:30.</div>
+</div>
+</sc-if>
+</section>
+</div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1720}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sec: 13338, pauseSec: 0, status: 'running',
+      done: { walk: '07:41', vitd: '08:12' }, refused: false,
+      read: { n3: true }, gone: {}
+    };
+  }
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.state;
+      if (s.status === 'running') this.setState({ sec: s.sec + 1 });
+      else if (s.status === 'paused') this.setState({ sec: s.sec + 1, pauseSec: s.pauseSec + 1 });
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  fmt(t, withSec) {
+    const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+    const mm = String(m).padStart(2, '0'), ss = String(s).padStart(2, '0');
+    return withSec ? h + ':' + mm + ':' + ss : h + ':' + mm;
+  }
+  renderVals() {
+    // SekaiPop theme roles (ThemeSet.qml, Virtual Singer palette)
+    const modes = [
+      { label: 'Light', paper: '#f5f1e6', pSurface: '#ffffff', pHover: '#f2f2f2', pDivider: '#e4e4ec', pRing: '#d9d9d9', pRingWhite: '#ffffff', pLine: '#b8b7c4', pShadow: '#ccccd5', pInk: '#555473', pInkSub: '#555473aa', chipFill: '#e7e7eb', chipInk: '#555473', surface: '#ffffff', ink: '#555473', line: '#b8b7c4', lineShadow: '#ccccd5', outerRing: '#d9d9d9' },
+      { label: 'Darker', paper: '#201f30', pSurface: '#191826', pHover: '#222133', pDivider: '#2c2a42', pRing: '#28273d', pRingWhite: '#32314c', pLine: '#3f3e55', pShadow: '#2f2f40', pInk: '#e4e4ec', pInkSub: '#e4e4ecaa', chipFill: '#3f3e55', chipInk: '#ffffff', surface: '#191826', ink: '#e4e4ec', line: '#3f3e55', lineShadow: '#2f2f40', outerRing: '#28273d' }
+    ];
+    const s = this.state;
+    const counted = Math.max(0, s.sec - 1080 - s.pauseSec);
+    const hours = {
+      running: s.status === 'running', notRunning: s.status !== 'running', paused: s.status === 'paused',
+      ended: s.status === 'ended', open: s.status !== 'ended',
+      elapsedFmt: s.status === 'ended' ? this.fmt(counted, false) : this.fmt(s.sec, true),
+      countedFmt: this.fmt(counted, false),
+      pauseFmt: Math.floor(s.pauseSec / 60) + ':' + String(s.pauseSec % 60).padStart(2, '0'),
+      pause: () => this.setState({ status: 'paused' }),
+      resume: () => this.setState({ status: 'running' }),
+      end: () => this.setState({ status: 'ended' }),
+      start: () => this.setState({ status: 'running', sec: 0, pauseSec: 0 })
+    };
+    const raw = [
+      { id: 'walk', title: 'Morning walk', meta: 'Habits', time: '07:30' },
+      { id: 'vitd', title: 'Vitamin D', meta: 'Medication · 1000 IU · 1 cap', time: '08:00' },
+      { id: 'plants', title: 'Water the plants', meta: 'Home', time: '09:00', late: true },
+      { id: 'ibu', title: 'Ibuprofen', meta: 'Medication · 200 mg · 1 tab · as needed', time: '', refuses: true },
+      { id: 'milk', title: 'Oat milk', meta: 'Groceries · 2 L', time: '' },
+      { id: 'stretch', title: 'Stretch', meta: 'Habits', time: '18:00' },
+      { id: 'mag', title: 'Magnesium', meta: 'Medication · 400 mg · 1 tab', time: '21:00' }
+    ];
+    const items = raw.map((r) => {
+      const at = s.done[r.id];
+      const done = !!at;
+      const late = !done && !!r.late;
+      return {
+        title: r.title, meta: r.meta, done, open: !done, late, notLate: !late,
+        right: done ? at : r.time,
+        btnLabel: done ? 'Undo ' + r.title : 'Complete ' + r.title,
+        toggle: () => {
+          if (r.refuses) { this.setState({ refused: true }); return; }
+          const d = Object.assign({}, this.state.done);
+          if (d[r.id]) delete d[r.id]; else d[r.id] = '15:57';
+          this.setState({ done: d, refused: false });
+        }
+      };
+    });
+    const doneCount = items.filter((i) => i.done).length;
+    const nitems = [
+      { id: 'n1', title: 'Invoice INV-0042 overdue', meta: 'cash · 8m', high: true },
+      { id: 'n2', title: 'Nightly backup finished', meta: 'automation · 2h' },
+      { id: 'n3', title: 'Weekly review is ready', meta: 'planning · 1d' }
+    ].filter((n) => !s.gone[n.id]).map((n) => {
+      const isRead = !!s.read[n.id];
+      return {
+        title: n.title, meta: n.meta, unread: !isRead, read: isRead,
+        high: !!n.high, dot: !n.high && !isRead, blank: !n.high && isRead,
+        markRead: () => this.setState({ read: Object.assign({}, this.state.read, { [n.id]: true }) }),
+        dismiss: () => this.setState({ gone: Object.assign({}, this.state.gone, { [n.id]: true }) })
+      };
+    });
+    const unread = nitems.filter((n) => n.unread).length;
+    return {
+      modes, hours,
+      lists: { items, doneCount, total: items.length, pct: Math.round((doneCount / items.length) * 100), refused: s.refused },
+      notif: {
+        items: nitems, unread, hasUnread: unread > 0, empty: nitems.length === 0,
+        readAll: () => this.setState({ read: { n1: true, n2: true, n3: true } })
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
