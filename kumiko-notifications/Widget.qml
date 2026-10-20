@@ -41,7 +41,9 @@ Item {
         token: root.host.secrets.token || ""
         onTokenChanged: {
             root.tokenWait = false
-            root.refresh()
+            // Later, not now: `ready` is a binding on the token too, and this handler can
+            // run before it has updated.
+            Qt.callLater(root.refresh)
         }
     }
 
@@ -353,11 +355,12 @@ Item {
                         }
                         Txt { theme: root.t; width: parent.width; visible: modelData.body !== ""; text: modelData.body; font.pixelSize: 14 }
                         Txt { theme: root.t; width: parent.width; text: modelData.meta; font.pixelSize: 14 }
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: root.open(modelData)
-                        }
+                    }
+                    // Beside the texts, not inside: a filling child breaks a Column's height.
+                    MouseArea {
+                        anchors.fill: texts
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.open(modelData)
                     }
                     Row {
                         id: keys
@@ -426,6 +429,7 @@ Item {
                 Count { visible: root.unread > 0; value: root.unread; x: parent.width - width + 10; y: -8; height: 24 }
             }
             Column {
+                id: latestTexts
                 x: bell.width + 14
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - x - (root.latest ? 50 : 0)
@@ -437,11 +441,11 @@ Item {
                     text: root.latest ? root.latest.meta + (root.unread > 1 ? " · +" + (root.unread - 1) + " more" : "")
                         : (root.rows.length ? "Last: " + root.rows[0].title + ", " + K.ago(root.list[0].createdAt, root.now) : "Nothing yet")
                 }
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.latest ? root.open(root.latest) : api.openInBrowser("/notifications")
-                }
+            }
+            MouseArea {
+                anchors.fill: latestTexts
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.latest ? root.open(root.latest) : api.openInBrowser("/notifications")
             }
             Key {
                 visible: !!root.latest

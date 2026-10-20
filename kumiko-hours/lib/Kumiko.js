@@ -253,7 +253,8 @@ function notifRows(list, now, limit, unreadOnly) {
 }
 
 // One event of the stream, "event: notifications" + "data: {...}": feed it lines, it
-// answers the snapshot when a blank line ends an event.
+// answers the event when a blank line ends it, or as soon as its data is whole JSON:
+// Quickshell's SplitParser does not pass empty lines on, so the blank line may never come.
 function SseReader() {
     this.event = ""
     this.data = []
@@ -270,8 +271,19 @@ SseReader.prototype.line = function (l) {
     var at = l.indexOf(":")
     var field = at < 0 ? l : l.slice(0, at)
     var value = at < 0 ? "" : l.slice(at + 1).replace(/^ /, "").replace(/\r$/, "")
-    if (field === "event") this.event = value
-    else if (field === "data") this.data.push(value)
+    if (field === "event") {
+        this.event = value
+        this.data = []
+    } else if (field === "data") {
+        this.data.push(value)
+        try {
+            var whole = JSON.parse(this.data.join("\n"))
+            var ev = this.event || "message"
+            this.event = ""
+            this.data = []
+            return { event: ev, data: whole }
+        } catch (e) {}
+    }
     return null
 }
 

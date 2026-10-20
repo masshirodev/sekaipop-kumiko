@@ -42,7 +42,9 @@ Item {
         token: root.host.secrets.token || ""
         onTokenChanged: {
             root.tokenWait = false
-            root.refresh()
+            // Later, not now: `ready` is a binding on the token too, and this handler can
+            // run before it has updated.
+            Qt.callLater(root.refresh)
         }
     }
 
