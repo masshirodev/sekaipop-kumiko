@@ -1,0 +1,30 @@
+{
+    "id": "kumiko-lists",
+    "name": "Kumiko Lists",
+    "version": "0.1.0",
+    "api": 1,
+    "description": "What is due today in your Kumiko lists, ticked off from the desktop.",
+    "icon": "checklist",
+    "frame": true,
+    "cloneable": true,
+    "settings": {
+        "server": "https://kumiko.ink",
+        "view": "list",
+        "rows": 6,
+        "showDone": true,
+        "refreshMinutes": 5,
+        "use24h": true
+    },
+    "settingsInfo": {
+        "server": { "label": "Kumiko address", "description": "Where your Kumiko lives.", "group": "Connection" },
+        "refreshMinutes": { "label": "Check every", "min": 1, "max": 30, "unit": "minutes", "group": "Connection" },
+        "view": { "label": "Show", "choices": [{ "value": "list", "label": "Today's list" }, { "value": "next", "label": "Next item" }, { "value": "compact", "label": "Compact" }], "group": "Look" },
+        "rows": { "label": "Rows", "description": "How many items the list shows before \"+N more\".", "min": 1, "max": 15, "group": "Look" },
+        "showDone": { "label": "Show done items", "description": "Off: only what is still to do.", "group": "Look" },
+        "use24h": { "label": "24-hour clock", "group": "Look" }
+    },
+    "groups": ["Connection", "Look"],
+    "secrets": {
+        "token": { "env": "KUMIKO_TOKEN", "file": "~/.config/sekaipop-kumiko/token" }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "id": "kumiko-notifications",
+    "name": "Kumiko Notifications",
+    "version": "0.1.0",
+    "api": 1,
+    "description": "Your Kumiko notifications, live, unread first: mark read, dismiss, open.",
+    "icon": "notifications",
+    "frame": true,
+    "cloneable": true,
+    "settings": {
+        "server": "https://kumiko.ink",
+        "view": "list",
+        "count": 5,
+        "unreadOnly": false
+    },
+    "settingsInfo": {
+        "server": { "label": "Kumiko address", "description": "Where your Kumiko lives. New notifications arrive live.", "group": "Connection" },
+        "view": { "label": "Show", "choices": [{ "value": "list", "label": "List" }, { "value": "latest", "label": "Newest" }, { "value": "compact", "label": "Compact" }], "group": "Look" },
+        "count": { "label": "How many", "min": 1, "max": 10, "group": "Look" },
+        "unreadOnly": { "label": "Unread only", "description": "Off: read ones stay, below the unread.", "group": "Look" }
+    },
+    "groups": ["Connection", "Look"],
+    "secrets": {
+        "token": { "env": "KUMIKO_TOKEN", "file": "~/.config/sekaipop-kumiko/token" }
+    }
+}

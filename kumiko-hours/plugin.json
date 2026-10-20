@@ -1,0 +1,28 @@
+{
+    "id": "kumiko-hours",
+    "name": "Kumiko Hours",
+    "version": "0.1.0",
+    "api": 1,
+    "description": "Clock in, pause and clock out of a Kumiko activity, with today's segments and the week.",
+    "icon": "timer",
+    "frame": true,
+    "cloneable": true,
+    "settings": {
+        "server": "https://kumiko.ink",
+        "activity": "",
+        "view": "session",
+        "refreshMinutes": 2,
+        "use24h": true
+    },
+    "settingsInfo": {
+        "server": { "label": "Kumiko address", "description": "Where your Kumiko lives.", "group": "Connection" },
+        "refreshMinutes": { "label": "Check every", "min": 1, "max": 30, "unit": "minutes", "group": "Connection" },
+        "activity": { "label": "Activity", "description": "Its name in Kumiko's address (work, gym) or its id. Empty: the first one.", "group": "Hours" },
+        "view": { "label": "Show", "choices": [{ "value": "session", "label": "Session" }, { "value": "week", "label": "Week" }, { "value": "compact", "label": "Compact" }], "group": "Look" },
+        "use24h": { "label": "24-hour clock", "group": "Look" }
+    },
+    "groups": ["Connection", "Hours", "Look"],
+    "secrets": {
+        "token": { "env": "KUMIKO_TOKEN", "file": "~/.config/sekaipop-kumiko/token" }
+    }
+}
