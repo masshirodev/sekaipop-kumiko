@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import "lib"
 import "lib/Kumiko.js" as K
 
@@ -81,6 +82,17 @@ Item {
         onTriggered: root.notice = ""
     }
     Component.onCompleted: root.refresh()
+
+    // "Check again": read the token file again (a token put in place since the shell
+    // started), then ask Kumiko. host.reloadSecrets() is newer than plugin api 1's first
+    // release; without it, reloading the plugins reads the files too.
+    function recheck() {
+        if (typeof root.host.reloadSecrets === "function")
+            root.host.reloadSecrets()
+        else if (!api.ready)
+            Quickshell.execDetached(["qs", "-c", "sekaipop", "ipc", "call", "plugins", "reload"])
+        root.refresh()
+    }
 
     function answer(status, body) {
         if (status >= 200 && status < 300) {
@@ -172,7 +184,7 @@ Item {
             theme: root.t
             problem: api.ready ? root.problem : null
             scope: "hours:write"
-            onRetry: root.refresh()
+            onRetry: root.recheck()
         }
 
         Txt {

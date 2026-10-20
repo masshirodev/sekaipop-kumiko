@@ -33,7 +33,7 @@ Column {
         elide: Text.ElideNone
         font.pixelSize: 14
         text: root.setup
-            ? "Put your API token in ~/.config/sekaipop-kumiko/token, or set the KUMIKO_TOKEN environment variable. Make one in Kumiko on a computer: Settings › API tokens, with " + root.scope + "."
+            ? "Put your API token in ~/.config/sekaipop-kumiko/token, then Check again. (KUMIKO_TOKEN works too, but only once the shell is restarted after it is set.) Make one in Kumiko on a computer: Settings › API tokens, with " + root.scope + "."
             : root.problem.text
     }
 
