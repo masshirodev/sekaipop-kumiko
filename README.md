@@ -25,8 +25,12 @@ updates them; `./install.sh --remove` takes them away.
 
 **The token.** In Kumiko, on a computer: Settings > API tokens. Give it the scopes of the
 widgets you use: `hours:write`, `lists:write`, `notifications:write` (write includes read).
-Put it in `~/.config/sekaipop-kumiko/token`, or in the `KUMIKO_TOKEN` environment variable
-(it must be there when the shell starts). The shell never stores it, and the widgets pass it
+Put it in `~/.config/sekaipop-kumiko/token` (`chmod 600` it), then press **Check again** on a
+widget. `KUMIKO_TOKEN` works too, but only if the shell's own environment has it: the shell
+is usually started by Hyprland, so a variable your terminal sets (`.zshrc`, an `.env`) never
+reaches it. The file is the dependable way. On a SekaiPop older than `host.reloadSecrets()`
+(PR #71), Check again opens the plugin in Settings > Desktop > Plugins: press **Reload** there,
+or restart the shell. The shell never stores it, and the widgets pass it
 to curl through the environment, never on a command line. Until it is found, each widget
 says what to do and has a **Check again** key.
 

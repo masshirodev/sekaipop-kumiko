@@ -81,12 +81,13 @@ Item {
 
     // "Check again": read the token file again (a token put in place since the shell
     // started), then ask Kumiko. host.reloadSecrets() is newer than plugin api 1's first
-    // release; without it, reloading the plugins reads the files too.
+    // release; a shell without it re-reads secret files only from the Reload key in
+    // Settings > Desktop > Plugins, so that card is opened on this plugin instead.
     function recheck() {
         if (typeof root.host.reloadSecrets === "function")
             root.host.reloadSecrets()
         else if (!api.ready)
-            Quickshell.execDetached(["qs", "-c", "sekaipop", "ipc", "call", "plugins", "reload"])
+            Quickshell.execDetached(["qs", "-c", "sekaipop", "ipc", "call", "plugins", "settings", root.host.id])
         root.refresh()
     }
 
