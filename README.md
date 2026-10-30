@@ -3,11 +3,11 @@
 Desktop widgets for [SekaiPop](https://github.com/Blapples/SekaiPop) that show a
 [Kumiko](https://kumiko.ink) account, drawn like the shell's own cards:
 
-| Widget                   | Shows                                                    | Does                                        |
-| ------------------------ | -------------------------------------------------------- | ------------------------------------------- |
-| **Kumiko Hours**         | the session running now, today's segments, the week       | clock in, pause (by type), resume, clock out |
-| **Kumiko Lists**         | what is due today and what is done, late items marked     | tick an item, Undo                          |
-| **Kumiko Notifications** | the newest ones, unread first, live from Kumiko's stream  | mark read, dismiss, mark all read, open     |
+| Widget                   | Shows                                                    | Does                                         |
+| ------------------------ | -------------------------------------------------------- | -------------------------------------------- |
+| **Kumiko Hours**         | the session running now, today's segments, the week      | clock in, pause (by type), resume, clock out |
+| **Kumiko Lists**         | what is due today and what is done, late items marked    | tick an item, Undo                           |
+| **Kumiko Notifications** | the newest ones, unread first, live from Kumiko's stream | mark read, dismiss, mark all read, open      |
 
 Each has three looks (Settings > Desktop > Plugins > the widget > Show): the full card, a
 one-row card and a compact square.
@@ -51,3 +51,8 @@ to check. Lists: **Rows**, **Show done items**. Notifications: **How many**, **U
 - `doc/KUMIKO-API.md` is the part of Kumiko's API they use, `doc/DESIGN.md` how the design
   became the widgets and where they depart from it, `doc/briefs/` the brief and the
   handoff.
+
+## License
+
+MIT, copyright masshirodev; see [LICENSE](./LICENSE). SekaiPop itself is GPL-3.0;
+these plugins are separate files it loads, and MIT is compatible with it.
